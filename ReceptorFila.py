@@ -10,7 +10,7 @@ class ReceptorFila(threading.Thread):
     def callback(self, ch, method, properties, body):
         print(" [x] Mensagem recebida %r" % body.decode('utf-8'))
         r = self.parent
-        r.receberMsg(self, body)
+        r.receberMsg(body)
 
     def run(self):
         params = pika.URLParameters('amqps://grlcqibb:dkC9dlyz6p9v55ErECes8KXmSvDiiDd7@jackal.rmq.cloudamqp.com/grlcqibb')
