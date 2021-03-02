@@ -84,6 +84,18 @@ class Login(tk.Tk):
         self.Button1.configure(highlightcolor="#ffffff")
         self.Button1.configure(pady="0")
         self.Button1.configure(text='''Entrar''')
+
+        self.BtnCad = tk.Button(self.Frame1, command=self.cad)
+        self.BtnCad.place(relx=0.317, rely=0.860, height=24, width=117)
+        self.BtnCad.configure(activebackground="#ffffff")
+        self.BtnCad.configure(activeforeground="#ffffff")
+        self.BtnCad.configure(background="#c0c0c0")
+        self.BtnCad.configure(disabledforeground="#a3a3a3")
+        self.BtnCad.configure(foreground="#000000")
+        self.BtnCad.configure(highlightbackground="#d9d9d9")
+        self.BtnCad.configure(highlightcolor="#ffffff")
+        self.BtnCad.configure(pady="0")
+        self.BtnCad.configure(text='''Cadastre-se aqui''')
     
     def cad(self):
         self.destroy
