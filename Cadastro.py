@@ -72,7 +72,7 @@ class Cadastro(tk.Tk):
         self.cadastrarpassword.configure(foreground="#000000")
         self.cadastrarpassword.configure(insertbackground="black")
 
-        self.Button1 = tk.Button(self.Frame1, command=self.registrar())
+        self.Button1 = tk.Button(self.Frame1, command=self.registrar)
         self.Button1.place(relx=0.317, rely=0.745, height=24, width=117)
         self.Button1.configure(activebackground="#ffffff")
         self.Button1.configure(activeforeground="#ffffff")

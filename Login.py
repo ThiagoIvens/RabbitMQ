@@ -73,7 +73,7 @@ class Login(tk.Tk):
         self.Label3.configure(foreground="#000000")
         self.Label3.configure(text='''Senha:''')
 
-        self.Button1 = tk.Button(self.Frame1)
+        self.Button1 = tk.Button(self.Frame1, command=self.logar)
         self.Button1.place(relx=0.317, rely=0.745, height=24, width=117)
         self.Button1.configure(activebackground="#ffffff")
         self.Button1.configure(activeforeground="#ffffff")
@@ -84,40 +84,19 @@ class Login(tk.Tk):
         self.Button1.configure(highlightcolor="#ffffff")
         self.Button1.configure(pady="0")
         self.Button1.configure(text='''Entrar''')
-        self.Button1.configure(command=lambda: self.logar())
-
-        self.Label4 = tk.Label(self.Frame1)
-        self.Label4.place(relx=0.280, rely=0.863, height=21, width=150)
-        self.Label4.configure(activebackground="#f9f9f9")
-        self.Label4.configure(activeforeground="black")
-        self.Label4.configure(background="#008000")
-        self.Label4.configure(disabledforeground="#a3a3a3")
-        self.Label4.configure(foreground="#000000")
-        self.Label4.configure(highlightbackground="#d9d9d9")
-        self.Label4.configure(highlightcolor="black")
-        self.Label4.configure(text='''Cadastre-se clicando aqui!''')
-        self.Label4.configure(command=lambda: self.cad())
- 
+    
     def cad(self):
         self.destroy
         Cadastro().mainloop()
 
     def logar(self):
-        print("Entrou no Logar")
         user = User()
         users = user.selectAllUsers()
         usuario = self.user.get()
         senha = self.password.get()
-        print("Primeira parte do logar:")
-        print(user)
-        print(users)
-        print(usuario)
-        print(senha)
 
         for usuarios in users:
-            print("Entrou no For")
             if usuarios[1] == usuario:
-                print("Fez o primeiro if")
                 if usuarios[2] == senha:
                     self.destroy()
                     Messenger(usuario).mainloop()

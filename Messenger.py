@@ -105,7 +105,7 @@ class Messenger(tk.Tk):
         self.btnEnviar.configure(highlightcolor=_fgcolor)
         self.btnEnviar.configure(pady="0")
         self.btnEnviar.configure(text='''Enviar''')
-        self.btnEnviar.configure(command=lambda:self.enviarMsg())
+        self.btnEnviar.configure(command=lambda:self.enviarMsg)
 
         #Inicia as Threads
         td = ReceptorFila.ReceptorFila(self)
