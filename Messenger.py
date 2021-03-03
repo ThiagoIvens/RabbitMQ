@@ -10,6 +10,7 @@ import pika
 import tkinter as tk
 import ReceptorFila
 import ReceptorPS
+import ReceptorPS2
 
 class Messenger(tk.Tk):
     def __init__(self, user):
@@ -123,8 +124,10 @@ class Messenger(tk.Tk):
         #Inicia as Threads
         td = ReceptorFila.ReceptorFila(self.usuario, self)
         tr = ReceptorPS.ReceptorPS(self.usuario, self)
+        tw = ReceptorPS2.ReceptorPS2(self.usuario, self)
         td.start()
         tr.start()
+        tw.start()
     
     def enviarMsg(self):
         msg = self.inputMsg.get()
@@ -136,7 +139,8 @@ class Messenger(tk.Tk):
         if(self.receptor == "Público" or self.receptor == 'Pythonistas'):
             # EmissorPS
             channel.exchange_declare(exchange=self.receptor, exchange_type='fanout')
-            mensagem = usuario + self.receptor + msg
+            mensagem = "("+ self.receptor +") "+ usuario +": "+ msg
+            mensagem = mensagem.encode('utf-8')
             channel.basic_publish(exchange=self.receptor, routing_key='', body=mensagem)
             print(" [x] Enviado para o Grupo %r" % mensagem)
             connection.close()
@@ -149,10 +153,10 @@ class Messenger(tk.Tk):
             connection.close()
         
         print(usuario +' enviando: '+ msg)
-        self.msgs["text"] += mensagem.decode('utf-8') +'\n'
+        self.msgs["text"] += "[enviado]"+ mensagem.decode('utf-8') +'\n'
         self.inputMsg.delete(0, tk.END)   
         return 
             
         
     def receberMsg(self, body):
-        self.msgs["text"] += body.decode('utf-8') + "\n"
+        self.msgs["text"] += "[recebida] "+ body.decode('utf-8') + "\n"
