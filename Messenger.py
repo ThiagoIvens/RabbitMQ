@@ -47,7 +47,7 @@ class Messenger(tk.Tk):
         self.ListUsers.configure(disabledforeground=_ana1color)
         self.ListUsers.configure(font="TkFixedFont")
         self.ListUsers.configure(foreground=_fgcolor)
-
+        self.usuario = user
         user = User()
         users = user.selectAllUsers()
         i = 1
@@ -76,6 +76,7 @@ class Messenger(tk.Tk):
         self.ListGroup.configure(font="TkFixedFont")
         self.ListGroup.configure(foreground=_fgcolor)
         self.ListGroup.insert(1, 'Público')
+        self.ListGroup.insert(2, 'Pythonistas')
 
         def groupEvent(event):
             index = self.ListGroup.curselection()
@@ -120,20 +121,18 @@ class Messenger(tk.Tk):
         self.btnEnviar.configure(text='''Enviar''')
 
         #Inicia as Threads
-        td = ReceptorFila.ReceptorFila(self)
-        tr = ReceptorPS.ReceptorPS(self)
+        td = ReceptorFila.ReceptorFila(self.usuario, self)
+        tr = ReceptorPS.ReceptorPS(self.usuario, self)
         td.start()
         tr.start()
     
     def enviarMsg(self):
-        msg = ": " + self.inputMsg.get()
-        print('enviando: '+ msg)
-        self.msgs["text"] += msg +'\n'
+        msg = self.inputMsg.get()
 
         params = pika.URLParameters('amqps://grlcqibb:dkC9dlyz6p9v55ErECes8KXmSvDiiDd7@jackal.rmq.cloudamqp.com/grlcqibb')
         connection = pika.BlockingConnection(params)
         channel = connection.channel()
-        usuario = "thiago"
+        usuario = self.usuario
         if(self.receptor == "Público"):
             # EmissorPS
             channel.exchange_declare(exchange=self.receptor, exchange_type='fanout')
@@ -144,10 +143,13 @@ class Messenger(tk.Tk):
         else:
             #EmissorFila
             channel.queue_declare(queue=self.receptor, durable=True)
-            mensagem = usuario + msg
+            mensagem = usuario + ": " + msg
             mensagem = mensagem.encode('utf-8')
             channel.basic_publish(exchange='', routing_key='thiago', body=mensagem)
             connection.close()
+        
+        print(usuario +' enviando: '+ msg)
+        self.msgs["text"] += mensagem.decode('utf-8') +'\n'
         self.inputMsg.delete(0, tk.END)   
         return 
             
