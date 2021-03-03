@@ -48,8 +48,8 @@ class Messenger(tk.Tk):
         self.ListUsers.configure(font="TkFixedFont")
         self.ListUsers.configure(foreground=_fgcolor)
         self.usuario = user
-        user = User()
-        users = user.selectAllUsers()
+        userParaLista = User()
+        users = userParaLista.selectAllUsers()
         i = 1
         for usuarios in users:
             self.ListUsers.insert(i, usuarios[1])
@@ -133,10 +133,10 @@ class Messenger(tk.Tk):
         connection = pika.BlockingConnection(params)
         channel = connection.channel()
         usuario = self.usuario
-        if(self.receptor == "Público"):
+        if(self.receptor == "Público" or self.receptor == 'Pythonistas'):
             # EmissorPS
             channel.exchange_declare(exchange=self.receptor, exchange_type='fanout')
-            mensagem = usuario + " (Público)" + msg
+            mensagem = usuario + self.receptor + msg
             channel.basic_publish(exchange=self.receptor, routing_key='', body=mensagem)
             print(" [x] Enviado para o Grupo %r" % mensagem)
             connection.close()
@@ -145,7 +145,7 @@ class Messenger(tk.Tk):
             channel.queue_declare(queue=self.receptor, durable=True)
             mensagem = usuario + ": " + msg
             mensagem = mensagem.encode('utf-8')
-            channel.basic_publish(exchange='', routing_key='thiago', body=mensagem)
+            channel.basic_publish(exchange='', routing_key=self.receptor, body=mensagem)
             connection.close()
         
         print(usuario +' enviando: '+ msg)
